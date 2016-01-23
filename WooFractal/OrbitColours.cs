@@ -9,5 +9,6 @@ namespace WooFractal
     {
         public Material _StartColour = new Material();
         public Material _EndColour = new Material();
+        public double _Multiplier = 1.0;
     }
 }

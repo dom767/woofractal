@@ -44,12 +44,14 @@ namespace WooFractal
         {
             materialControl1.SetMaterial(_OrbitColours._StartColour, this);
             materialControl2.SetMaterial(_OrbitColours._EndColour, this);
+            wooSlider1.Set(_OrbitColours._Multiplier, 10, false, this);
         }
 
         public void GUIUpdate()
         {
             _OrbitColours._StartColour = materialControl1.GetMaterial();
             _OrbitColours._EndColour = materialControl2.GetMaterial();
+            _OrbitColours._Multiplier = wooSlider1.GetSliderValue();
             _GUIUpdateable.GUIUpdate();
         }
     }

@@ -31,7 +31,9 @@ namespace WooFractal
             if (max < 0.001) max = 0.001;
 
             script += "shader fracColours {\r\n";
-            script += "trappos=diff\r\n";
+            script += "trappos = vec(mod(diff.x*" + _OrbitColoursX._Multiplier.ToString() + ",1.0),";
+            script += "mod(diff.y*" + _OrbitColoursY._Multiplier.ToString() + ",1.0),";
+            script += "mod(diff.z*" + _OrbitColoursZ._Multiplier.ToString() + ",1.0))\r\n";
             script += "diff=lerp(vec(" + _OrbitColoursX._StartColour._DiffuseColour.ToString() + "), vec(" + _OrbitColoursX._EndColour._DiffuseColour.ToString() + "), trappos.x)\r\n";
             script += "diff+=lerp(vec(" + _OrbitColoursY._StartColour._DiffuseColour.ToString() + "), vec(" + _OrbitColoursY._EndColour._DiffuseColour.ToString() + "), trappos.y)\r\n";
             script += "diff+=lerp(vec(" + _OrbitColoursZ._StartColour._DiffuseColour.ToString() + "), vec(" + _OrbitColoursZ._EndColour._DiffuseColour.ToString() + "), trappos.z)\r\n";
