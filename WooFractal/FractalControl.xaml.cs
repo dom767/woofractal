@@ -52,7 +52,7 @@ namespace WooFractal
                 {
                     Thickness marg = rect.Margin;
                     marg.Left = controlMid;
-                    rect.Margin = marg;
+                       rect.Margin = marg;
                     rect.Width = nvalue * controlWidth;
                 }
             }

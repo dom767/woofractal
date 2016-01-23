@@ -19,11 +19,11 @@ namespace WooFractal
             _Density = 1.0f;
             _TintDensity = 0.1f;
             _Shininess = 1.0f;
-            _DiffuseColour = new CFConstant(1.0f, 0.5f, 0.0f);
-            _SpecularColour = new CFConstant(1.0f, 1.0f, 1.0f);
-            _EmissiveColour = new CFConstant(0.0f, 0.0f, 0.0f);
-            _Reflectivity = new CFConstant(0.3f, 0.3f, 0.3f);
-            _AbsorptionColour = new CFConstant(0.0f, 0.0f, 0.0f);
+            _DiffuseColour = new Colour(1.0f, 0.5f, 0.0f);
+            _SpecularColour = new Colour(0.4f, 0.4f, 0.4f);
+            _EmissiveColour = new Colour(0.0f, 0.0f, 0.0f);
+            _Reflectivity = new Colour(0.3f, 0.3f, 0.3f);
+            _AbsorptionColour = new Colour(0.0f, 0.0f, 0.0f);
             _MaterialFunction = "";
         }
 
@@ -48,7 +48,7 @@ namespace WooFractal
             XElement mat;
             if (preview)
             {
-                ColourFunction black = new CFConstant(0, 0, 0);
+                Colour black = new Colour(0, 0, 0);
                 mat = new XElement("MATERIAL",
                     new XAttribute("specularPower", 10),
                     new XAttribute("opacity", 1),
@@ -84,11 +84,11 @@ namespace WooFractal
         }
 
         public string _MaterialFunction;
-        public ColourFunction _DiffuseColour;
-        public ColourFunction _SpecularColour;
-        public ColourFunction _EmissiveColour;
-        public ColourFunction _Reflectivity;
-        public ColourFunction _AbsorptionColour;
+        public Colour _DiffuseColour;
+        public Colour _SpecularColour;
+        public Colour _EmissiveColour;
+        public Colour _Reflectivity;
+        public Colour _AbsorptionColour;
         public float _SpecularPower;
         public float _Opacity;
         public float _RefractiveIndex;

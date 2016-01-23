@@ -17,16 +17,53 @@ namespace WooFractal
     /// <summary>
     /// Interaction logic for ColourSelector.xaml
     /// </summary>
-    public partial class ColourSelector : UserControl
+    public partial class ColourSelector : UserControl, IGUIUpdateable
     {
         public ColourSelector()
         {
             InitializeComponent();
         }
 
-        public void Set(Colour colour)
+        IGUIUpdateable _GUIUpdateTarget;
+        Colour _Colour;
+        double _Maximum;
+
+        public void Set(Colour colour, double max, IGUIUpdateable guiUpdateTarget)
         {
-//            ColourImage
+            _GUIUpdateTarget = guiUpdateTarget;
+            _Colour = colour;
+            _Maximum = max;
+
+            RenderSliders();
+
+            UpdateSwatch();
+        }
+
+        private void RenderSliders()
+        {
+            wooSlider1.Set(_Colour._Red, _Maximum, false, this);
+            wooSlider2.Set(_Colour._Green, _Maximum, false, this);
+            wooSlider3.Set(_Colour._Blue, _Maximum, false, this);
+        }
+
+        public void GUIUpdate()
+        {
+            _Colour._Red = wooSlider1.GetSliderValue();
+            _Colour._Green = wooSlider2.GetSliderValue();
+            _Colour._Blue = wooSlider3.GetSliderValue();
+
+            _GUIUpdateTarget.GUIUpdate();
+
+            UpdateSwatch();
+        }
+
+        private void UpdateSwatch()
+        {
+        }
+
+        public Colour GetColour()
+        {
+            return _Colour;
         }
     }
 }

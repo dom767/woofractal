@@ -88,11 +88,21 @@
     <Compile Include="FinalRender.xaml.cs">
       <DependentUpon>FinalRender.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FractalColourControl.xaml.cs">
+      <DependentUpon>FractalColourControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FractalColours.cs" />
     <Compile Include="FractalControl.xaml.cs">
       <DependentUpon>FractalControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="HelpWindow.xaml.cs">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MaterialControl.xaml.cs">
+      <DependentUpon>MaterialControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MaterialEditor.xaml.cs">
+      <DependentUpon>MaterialEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Objects\Background.cs" />
     <Compile Include="Objects\Circle.cs" />
@@ -149,9 +159,17 @@
     <Compile Include="Objects\WooScript\TanFloatFunction.cs" />
     <Compile Include="Objects\WooScript\VecAssignStatement.cs" />
     <Compile Include="Objects\WooScript\WooState.cs" />
+    <Compile Include="OrbitColourControl.xaml.cs">
+      <DependentUpon>OrbitColourControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OrbitColours.cs" />
     <Compile Include="PostProcessSettings.xaml.cs">
       <DependentUpon>PostProcessSettings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RenderControls.xaml.cs">
+      <DependentUpon>RenderControls.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RenderOptions.cs" />
     <Compile Include="RPYEditor.xaml.cs">
       <DependentUpon>RPYEditor.xaml</DependentUpon>
     </Compile>
@@ -177,6 +195,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="FractalColourControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="FractalControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -197,7 +219,23 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="MaterialControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MaterialEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="OrbitColourControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="PostProcessSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RenderControls.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

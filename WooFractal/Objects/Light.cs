@@ -218,11 +218,11 @@ namespace WooFractal
         public override void CreateElement(XElement parent, Vector3 position)
         {
             Material mat = new Material();
-            mat._DiffuseColour = new CFConstant(0, 0, 0);
-            mat._SpecularColour = new CFConstant(0, 0, 0);
-            mat._Reflectivity = new CFConstant(0, 0, 0);
+            mat._DiffuseColour = new Colour(0, 0, 0);
+            mat._SpecularColour = new Colour(0, 0, 0);
+            mat._Reflectivity = new Colour(0, 0, 0);
             float attenuation = 1;
-            mat._EmissiveColour = new CFConstant(_Colour._Red * attenuation, _Colour._Green * attenuation, _Colour._Blue * attenuation);
+            mat._EmissiveColour = new Colour(_Colour._Red * attenuation, _Colour._Green * attenuation, _Colour._Blue * attenuation);
 
             Sphere sphere = new Sphere();
             sphere._Position = position;

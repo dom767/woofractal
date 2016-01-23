@@ -21,7 +21,7 @@
             <Image Height="14" HorizontalAlignment="Left" Margin="43,184,0,0" Name="image5" Stretch="Fill" VerticalAlignment="Top" Width="14" Source="/WooFractal;component/lock.png" />
             <Label Content="Scale" Height="24" HorizontalAlignment="Left" Margin="56,180,0,0" Name="label4" VerticalAlignment="Top" Width="193" />
             <Button Content="V" Height="34" HorizontalAlignment="Left" Margin="4,195,0,0" Name="button2" VerticalAlignment="Top" Width="22" Click="button2_Click" />
-            <Label Content="T E T R A H E D R O N" Height="30" HorizontalAlignment="Left" Margin="30,-1,0,0" Name="label5" VerticalAlignment="Top" Width="316" Background="Black" Foreground="White" FontWeight="ExtraBold" VerticalContentAlignment="Center" FontSize="14" HorizontalContentAlignment="Right" />
+            <Label Content="T E T R A H E D R O N" Height="30" HorizontalAlignment="Left" Margin="30,0,0,0" Name="label5" VerticalAlignment="Top" Width="316" Background="Black" Foreground="White" FontWeight="ExtraBold" VerticalContentAlignment="Center" FontSize="14" HorizontalContentAlignment="Right" />
             <Button Content="X" Height="34" HorizontalAlignment="Left" Margin="4,104,0,0" Name="button3" VerticalAlignment="Top" Width="22" Click="button3_Click" />
             <my:WooSlider HorizontalAlignment="Left" Margin="30,54,0,0" x:Name="wooSlider1" VerticalAlignment="Top" />
             <my:WooSlider HorizontalAlignment="Left" Margin="135,54,0,0" x:Name="wooSlider2" VerticalAlignment="Top" />

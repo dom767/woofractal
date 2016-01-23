@@ -106,16 +106,11 @@ namespace WooFractal.Objects.WooScript
         protected Material GenerateMaterial(WooState state)
         {
             Material ret = new Material();
-            CFConstant diffuse = ret._DiffuseColour as CFConstant;
-            diffuse._Colour = state._Diff;
-            CFConstant reflectivity = ret._Reflectivity as CFConstant;
-            reflectivity._Colour = state._Refl;
-            CFConstant emissive = ret._EmissiveColour as CFConstant;
-            emissive._Colour = state._Emi;
-            CFConstant specular = ret._SpecularColour as CFConstant;
-            specular._Colour = state._Spec;
-            CFConstant absorption = ret._AbsorptionColour as CFConstant;
-            absorption._Colour = state._Abs;
+            ret._DiffuseColour = state._Diff;
+            ret._Reflectivity = state._Refl;
+            ret._EmissiveColour = state._Emi;
+            ret._SpecularColour = state._Spec;
+            ret._AbsorptionColour = state._Abs;
             ret._Opacity = (float)state._Opacity;
             ret._Density = (float)state._Density;
             ret._TintDensity = (float)state._TintDensity;

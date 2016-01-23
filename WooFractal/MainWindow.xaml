@@ -1,7 +1,7 @@
 ﻿<Window x:Class="WooFractal.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="561" Width="1170" KeyDown="Window_KeyDown" Closing="Window_Closing_1" Loaded="Window_Loaded">
+        Title="MainWindow" Height="561" Width="1170" KeyDown="Window_KeyDown" Closing="Window_Closing_1" Loaded="Window_Loaded" xmlns:my="clr-namespace:WooFractal">
 
     <Window.Resources>
         <Style x:Key="NoChromeButton" TargetType="{x:Type Button}">
@@ -67,14 +67,17 @@
                     <TextBox Height="23" HorizontalAlignment="Left" Text="{Binding _CamTagY, UpdateSourceTrigger=PropertyChanged}" Margin="137,242,0,0" x:Name="camTargetY" VerticalAlignment="Top" Width="32" TextChanged="RefreshRender" />
                     <TextBox Height="23" HorizontalAlignment="Left" Text="{Binding _CamTagZ, UpdateSourceTrigger=PropertyChanged}" Margin="169,242,0,0" x:Name="camTargetZ" VerticalAlignment="Top" Width="32" TextChanged="RefreshRender" />
                     <CheckBox Content="Shadows Enabled" Height="16" HorizontalAlignment="Left" Margin="91,280,0,0" Name="shadowsEnabled" VerticalAlignment="Top" Unchecked="RefreshRenderRouted" Checked="RefreshRenderRouted" />
+                    <ScrollViewer Name="scrollViewer2" Margin="1,302,0,-1" VerticalScrollBarVisibility="Visible" Height="187">
+                        <StackPanel HorizontalAlignment="Left" Name="stackPanel2" VerticalAlignment="Top" CanVerticallyScroll="True" >
+                        </StackPanel>
+                    </ScrollViewer>
                 </Grid>
             </TabItem>
             <TabItem Header="Colouring" Name="tabItem3">
-                <Grid>
-                    <TextBox Height="521" HorizontalAlignment="Left" Name="lightingDesc" VerticalAlignment="Top" Width="425" AcceptsReturn="True" AutoWordSelection="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" IsManipulationEnabled="True" Margin="0,29,0,0" />
-                    <Button Content="Load Script" Height="23" HorizontalAlignment="Left" Margin="200,0,0,0" Name="loadLighting" VerticalAlignment="Top" Width="109" Click="loadLighting_Click" />
-                    <Button Content="Save Script" Height="23" HorizontalAlignment="Right" Name="saveLighting" VerticalAlignment="Top" Width="109" Click="saveLighting_Click" />
-                </Grid>
+                <ScrollViewer Name="scrollViewer3" Margin="1,0,0,-1" VerticalScrollBarVisibility="Visible" Height="483">
+                    <StackPanel HorizontalAlignment="Left" Name="stackPanel3" VerticalAlignment="Top" CanVerticallyScroll="True" >
+                    </StackPanel>
+                </ScrollViewer>
             </TabItem>
         </TabControl>
         <Button Content="Save XML" HorizontalAlignment="Left" Margin="644,0,0,13" Name="button5" Width="101" Click="button5_Click" Height="23" VerticalAlignment="Bottom" />

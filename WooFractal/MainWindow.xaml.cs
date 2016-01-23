@@ -257,6 +257,21 @@ namespace WooFractal
             _FractalIterations.Add(new WooFractalIteration(EFractalType.Tetra, new Vector3(0, 0, 0), new Vector3(0, 0, 0), 2.0, new Vector3(1, 1, 1), 1));
             _FractalIterations.Add(new WooFractalIteration(EFractalType.Menger, new Vector3(0.2, 0, 0), new Vector3(0, 0, 0), 3.0, new Vector3(1, 1, 1), 1));
             BuildFractalList();
+
+            _RenderOptions = new RenderOptions();
+            BuildOptionsList();
+
+            _FractalColours = new FractalColours();
+            _FractalColours._XOrbitEnabled = true;
+            _FractalColours._OrbitColoursX._StartColour._DiffuseColour = new Colour(0, 0, 0);
+            _FractalColours._OrbitColoursX._EndColour._DiffuseColour = new Colour(1, 0, 0);
+            _FractalColours._YOrbitEnabled = true;
+            _FractalColours._OrbitColoursY._StartColour._DiffuseColour = new Colour(0, 0, 0);
+            _FractalColours._OrbitColoursY._EndColour._DiffuseColour = new Colour(0, 1, 0);
+            _FractalColours._ZOrbitEnabled = true;
+            _FractalColours._OrbitColoursZ._StartColour._DiffuseColour = new Colour(0, 0, 0);
+            _FractalColours._OrbitColoursZ._EndColour._DiffuseColour = new Colour(0, 0, 1);
+            BuildColourList();
         }
 
         private List<WooFractalIteration> _FractalIterations = new List<WooFractalIteration>();
@@ -291,6 +306,24 @@ namespace WooFractal
             stackPanel1.Children.Add(new AddFractal());
         }
 
+        RenderOptions _RenderOptions;
+
+        private void BuildOptionsList()
+        {
+            stackPanel2.Children.Clear();
+
+            stackPanel2.Children.Add(_RenderOptions.GetControl());
+        }
+
+        FractalColours _FractalColours;
+
+        private void BuildColourList()
+        {
+            stackPanel3.Children.Clear();
+
+            stackPanel3.Children.Add(_FractalColours.GetControl());
+        }
+
         ImageRenderer _ImageRenderer;
         private void button2_Click(object sender, RoutedEventArgs e)
         {
@@ -311,7 +344,7 @@ namespace WooFractal
             {
                 _ImageRenderer = new ImageRenderer(image1, BuildXML(false), 480, 270, false);   
                 _ImageRenderer.Render();
-                _ImageRenderer = new ImageRenderer(image1, BuildXML(true), (int)((float)480 * _Scale), (int)((float)270 * _Scale), false);
+                _ImageRenderer = new ImageRenderer(image1, BuildXML(false), (int)((float)480 * _Scale), (int)((float)270 * _Scale), false);
             }
             else
             {
@@ -336,6 +369,8 @@ namespace WooFractal
             return true;
         }
 
+        bool _ComplexMaterials = false;
+
         public void Compile()
         {
 //            _BackgroundScript._Program = backgroundDesc.Text;
@@ -344,14 +379,20 @@ namespace WooFractal
 
             SaveStatus();
 
-            _SceneScript._Program = "rule main {";
+            _SceneScript._Program = "rule main {\r\n";
             _SceneScript._Program += "fractal_reset()\r\n";
             for (int i = 0; i < _FractalIterations.Count; i++)
             {
                 _SceneScript._Program += _FractalIterations[i].GetFractalString();
             }
+            _SceneScript._Program += "distanceminimum=" + Math.Pow(10, -_RenderOptions._DistanceMinimum).ToString("0.#######") + "\r\n";
+            _SceneScript._Program += "distanceiterations=" + _RenderOptions._DistanceIterations + "\r\n";
+            _SceneScript._Program += "stepsize=" + _RenderOptions._StepSize + "\r\n";
+            _SceneScript._Program += "materialfunction(fracColours)\r\n";
             _SceneScript._Program += "fractal\r\n";
-            _SceneScript._Program += "}";
+            _SceneScript._Program += "}\r\n";
+
+            _SceneScript._Program += _FractalColours.GenerateScript(_ComplexMaterials);
 
             bool success = CompileSingle(ref _BackgroundScript);
             success &= CompileSingle(ref _SceneScript);
@@ -376,7 +417,7 @@ namespace WooFractal
                 _ImageRenderer.TransferLatest(false);
                 _ImageRenderer.Stop();
             }
-            _ImageRenderer = new ImageRenderer(image1, BuildXML(true), (int)image1.Width, (int)image1.Height, true);
+            _ImageRenderer = new ImageRenderer(image1, BuildXML(false), (int)image1.Width, (int)image1.Height, true);
             _ImageRenderer.SetFixedExposure(!(autoExposure.IsChecked.HasValue && autoExposure.IsChecked.Value));
             _ImageRenderer.SetExposureValue((float)_Exposure);
             _ImageRenderer.Render();
@@ -439,7 +480,6 @@ namespace WooFractal
 
         bool _Dirty = true;
         bool _CameraDirty = false;
-        bool _RenderEnabled = true;
         DispatcherTimer _Timer;
 
         public void SetDirty()
@@ -507,7 +547,6 @@ namespace WooFractal
 //            if (_Velocity.MagnitudeSquared() < 0.0001)
   //              _Timer.Stop();
         }
-        bool oneRender = false;
 
         private void image1_GotFocus(object sender, RoutedEventArgs e)
         {
@@ -597,6 +636,19 @@ namespace WooFractal
             TriggerPreview();
         }
 
+        public void StopPreview()
+        {
+            _Timer.Stop();
+            _ImageRenderer.Stop();
+            _ImageRenderer = null;
+        }
+
+        public void StartPreview()
+        {
+            TriggerPreview();
+            _Timer.Start();
+        }
+
         private void button4_Click(object sender, RoutedEventArgs e)
         {
             SaveStatus(); 
@@ -608,19 +660,14 @@ namespace WooFractal
             _Camera._Spherical = (float)_Spherical;
             _Camera._Stereographic = (float)_Stereographic;
 
-
-            _Timer.Stop();
-            _ImageRenderer.Stop();
-            _ImageRenderer = null;
+            StopPreview();
 
             FinalRender ownedWindow = new FinalRender(ref _Scene, ref _Camera, ref _PostProcess);
 
             ownedWindow.Owner = Window.GetWindow(this);
             ownedWindow.ShowDialog();
 
-//            Compile();
-            TriggerPreview();
-            _Timer.Start();
+            StartPreview();
         }
 
         private void image1_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -661,7 +708,6 @@ namespace WooFractal
         private void loadLighting_Click(object sender, RoutedEventArgs e)
         {
             _LightingScript.LoadUserInput("lighting");
-            lightingDesc.Text = _LightingScript._Program;
         }
 
         private void button5_Click(object sender, RoutedEventArgs e)
