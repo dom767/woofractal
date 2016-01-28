@@ -31,7 +31,7 @@
    
     <Grid Name="MainCanvas">
         <Button Style="{DynamicResource NoChromeButton}" Name="imagebutton" Margin="395,0,0,40" Height="Auto" PreviewMouseLeftButtonDown="image1_MouseLeftButtonDown" PreviewMouseMove="Window_MouseMove" PreviewMouseLeftButtonUp="image1_MouseLeftButtonUp" SizeChanged="imagebutton_SizeChanged">
-            <Image Name="image1" Stretch="None" StretchDirection="UpOnly" HorizontalAlignment="Right" Width="753" Focusable="True" Panel.ZIndex="0" GotFocus="image1_GotFocus" Margin="0,1,0,0" Source="/WooFractal;component/cuboidthumb.jpg" Height="480" VerticalAlignment="Top" />
+            <Image Name="image1" Stretch="None" StretchDirection="UpOnly" HorizontalAlignment="Right" Width="753" Focusable="True" Panel.ZIndex="0" GotFocus="image1_GotFocus" Margin="0,1,0,0" Height="480" VerticalAlignment="Top" />
         </Button>
         <Button Content="Final Render" HorizontalAlignment="Left" Margin="395,0,0,13" Name="button4" Width="235" Click="button4_Click" Height="23" VerticalAlignment="Bottom" />
         <TabControl HorizontalAlignment="Left" Name="tabControl1" Width="389" Margin="0,0,0,2">
