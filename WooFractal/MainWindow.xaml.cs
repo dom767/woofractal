@@ -213,6 +213,9 @@ namespace WooFractal
 
             _Scene._PathTracer = pt;
 
+            _Dirty = false;
+            _CameraDirty = false;
+
             return XML;
         }
         
@@ -540,8 +543,6 @@ namespace WooFractal
 //                    _ImageRenderer.UpdateCamera(_Camera.CreateElement().ToString());
                 }
                 _ImageRenderer.Render();
-                _Dirty = false;
-                _CameraDirty = false;
             }
 
 //            if (_Velocity.MagnitudeSquared() < 0.0001)
@@ -826,7 +827,8 @@ namespace WooFractal
             image1.Height = imagebutton.ActualHeight;
             image1.Width = imagebutton.ActualWidth;
 
-            TriggerPreview();
+            if (imagebutton.IsLoaded)
+               TriggerPreview();
         }
 
         public void RemoveIteration(WooFractalIteration iteration)
