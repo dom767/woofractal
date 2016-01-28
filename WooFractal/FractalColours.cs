@@ -30,10 +30,17 @@ namespace WooFractal
             double max = totalDiffuse.GetMaxComponent();
             if (max < 0.001) max = 0.001;
 
+            string roundstartX = (_OrbitColoursX._BlendType == OrbitColours.EBlendType.Chop) ? "round(" : "";
+            string roundendX = (_OrbitColoursX._BlendType == OrbitColours.EBlendType.Chop) ? ")" : "";
+            string roundstartY = (_OrbitColoursY._BlendType == OrbitColours.EBlendType.Chop) ? "round(" : "";
+            string roundendY = (_OrbitColoursY._BlendType == OrbitColours.EBlendType.Chop) ? ")" : "";
+            string roundstartZ = (_OrbitColoursZ._BlendType == OrbitColours.EBlendType.Chop) ? "round(" : "";
+            string roundendZ = (_OrbitColoursZ._BlendType == OrbitColours.EBlendType.Chop) ? ")" : "";
+
             script += "shader fracColours {\r\n";
-            script += "trappos = vec(mod(diff.x*" + _OrbitColoursX._Multiplier.ToString() + ",1.0),";
-            script += "mod(diff.y*" + _OrbitColoursY._Multiplier.ToString() + ",1.0),";
-            script += "mod(diff.z*" + _OrbitColoursZ._Multiplier.ToString() + ",1.0))\r\n";
+            script += "trappos = vec("+roundstartX+"pow(mod((diff.x*" + _OrbitColoursX._Multiplier.ToString() + ")+" + _OrbitColoursX._Offset.ToString() + ",1.0)," + Math.Pow(10, _OrbitColoursX._Power).ToString() + ")"+roundendX+",";
+            script += roundstartY + "pow(mod((diff.y*" + _OrbitColoursY._Multiplier.ToString() + ")+" + _OrbitColoursY._Offset.ToString() + ",1.0)," + Math.Pow(10, _OrbitColoursY._Power).ToString() + ")" + roundendY + ",";
+            script += roundstartZ + "pow(mod((diff.z*" + _OrbitColoursZ._Multiplier.ToString() + ")+" + _OrbitColoursZ._Offset.ToString() + ",1.0)," + Math.Pow(10, _OrbitColoursZ._Power).ToString() + ")" + roundendZ + ")\r\n";
             script += "diff=lerp(vec(" + _OrbitColoursX._StartColour._DiffuseColour.ToString() + "), vec(" + _OrbitColoursX._EndColour._DiffuseColour.ToString() + "), trappos.x)\r\n";
             script += "diff+=lerp(vec(" + _OrbitColoursY._StartColour._DiffuseColour.ToString() + "), vec(" + _OrbitColoursY._EndColour._DiffuseColour.ToString() + "), trappos.y)\r\n";
             script += "diff+=lerp(vec(" + _OrbitColoursZ._StartColour._DiffuseColour.ToString() + "), vec(" + _OrbitColoursZ._EndColour._DiffuseColour.ToString() + "), trappos.z)\r\n";
