@@ -64,19 +64,19 @@ namespace WooFractal
 
         private void RenderSwatches()
         {
-            wooSlider1.Set(_Parent._PreRotation.x, Math.PI, true, this);
-            wooSlider2.Set(_Parent._PreRotation.y, Math.PI, true, this);
-            wooSlider3.Set(_Parent._PreRotation.z, Math.PI, true, this);
+            wooSlider1.Set(_Parent._PreRotation.x, -Math.PI, Math.PI, this);
+            wooSlider2.Set(_Parent._PreRotation.y, -Math.PI, Math.PI, this);
+            wooSlider3.Set(_Parent._PreRotation.z, -Math.PI, Math.PI, this);
 
-            wooSlider4.Set(_Parent._PostRotation.x, Math.PI, true, this);
-            wooSlider5.Set(_Parent._PostRotation.y, Math.PI, true, this);
-            wooSlider6.Set(_Parent._PostRotation.z, Math.PI, true, this);
+            wooSlider4.Set(_Parent._PostRotation.x, -Math.PI, Math.PI, this);
+            wooSlider5.Set(_Parent._PostRotation.y, -Math.PI, Math.PI, this);
+            wooSlider6.Set(_Parent._PostRotation.z, -Math.PI, Math.PI, this);
 
-            wooSlider7.Set(_Parent._Offset.x, 3, false, this);
-            wooSlider8.Set(_Parent._Offset.y, 3, false, this);
-            wooSlider9.Set(_Parent._Offset.z, 3, false, this);
+            wooSlider7.Set(_Parent._Offset.x, 0, 3, this);
+            wooSlider8.Set(_Parent._Offset.y, 0, 3, this);
+            wooSlider9.Set(_Parent._Offset.z, 0, 3, this);
 
-            wooSlider10.Set(_Parent._Scale, 4, false, this);
+            wooSlider10.Set(_Parent._Scale, 0, 4, this);
 
             SetName(_Parent._FractalType);
 

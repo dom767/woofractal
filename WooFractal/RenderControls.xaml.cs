@@ -32,9 +32,9 @@ namespace WooFractal
 
         public void RenderSliders()
         {
-            wooSlider1.Set(_Parent._DistanceMinimum, 5, false, this);
-            wooSlider2.Set(_Parent._DistanceIterations, 1024, false, this);
-            wooSlider3.Set(_Parent._StepSize, 1.0, false, this);
+            wooSlider1.Set(_Parent._DistanceMinimum, 0, 5, this);
+            wooSlider2.Set(_Parent._DistanceIterations, 1, 1024, this);
+            wooSlider3.Set(_Parent._StepSize, 0.01, 1.0, this);
         }
 
         public void GUIUpdate()

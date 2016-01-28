@@ -41,9 +41,9 @@ namespace WooFractal
 
         private void RenderSliders()
         {
-            wooSlider1.Set(_Colour._Red, _Maximum, false, this);
-            wooSlider2.Set(_Colour._Green, _Maximum, false, this);
-            wooSlider3.Set(_Colour._Blue, _Maximum, false, this);
+            wooSlider1.Set(_Colour._Red, 0, _Maximum, this);
+            wooSlider2.Set(_Colour._Green, 0, _Maximum, this);
+            wooSlider3.Set(_Colour._Blue, 0, _Maximum, this);
         }
 
         public void GUIUpdate()

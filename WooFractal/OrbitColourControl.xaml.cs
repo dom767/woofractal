@@ -20,7 +20,7 @@ namespace WooFractal
     public partial class OrbitColourControl : UserControl, IGUIUpdateable
     {
         OrbitColours _OrbitColours;
-        IGUIUpdateable _GUIUpdateable;
+        IGUIUpdateable _GUIUpdateable;         
 
         public OrbitColourControl()
         {
@@ -44,7 +44,18 @@ namespace WooFractal
         {
             materialControl1.SetMaterial(_OrbitColours._StartColour, this);
             materialControl2.SetMaterial(_OrbitColours._EndColour, this);
-            wooSlider1.Set(_OrbitColours._Multiplier, 10, false, this);
+            wooSlider1.Set(_OrbitColours._Multiplier, 0, 10, this);
+            switch (_OrbitColours._BlendType)
+                {
+                case OrbitColours.EBlendType.Linear:
+                    comboBox1.SelectedIndex = 0;
+                    break;
+                case OrbitColours.EBlendType.Chop:
+                    comboBox1.SelectedIndex = 1;
+                    break;
+            }
+            wooSlider2.Set(_OrbitColours._Power, -2, 2, this);
+            wooSlider3.Set(_OrbitColours._Offset, 0, 1, this);
         }
 
         public void GUIUpdate()
@@ -52,7 +63,25 @@ namespace WooFractal
             _OrbitColours._StartColour = materialControl1.GetMaterial();
             _OrbitColours._EndColour = materialControl2.GetMaterial();
             _OrbitColours._Multiplier = wooSlider1.GetSliderValue();
+            _OrbitColours._Power = wooSlider2.GetSliderValue();
+            _OrbitColours._Offset = wooSlider3.GetSliderValue();
             _GUIUpdateable.GUIUpdate();
+        }
+
+        private void comboBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_OrbitColours == null)
+                return;
+            switch (comboBox1.SelectedIndex)
+            {
+                case 0:
+                    _OrbitColours._BlendType = OrbitColours.EBlendType.Linear;
+                    break;
+                case 1:
+                    _OrbitColours._BlendType = OrbitColours.EBlendType.Chop;
+                    break;
+            }
+            GUIUpdate();
         }
     }
 }

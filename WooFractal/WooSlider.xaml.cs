@@ -29,15 +29,15 @@ namespace WooFractal
         }
 
         double _Value;
-        double _Range;
-        bool _Signed;
+        double _Min;
+        double _Max;
         IGUIUpdateable _GUIUpdateTarget;
 
-        public void Set(double value, double range, bool signed, IGUIUpdateable guiTarget)
+        public void Set(double value, double min, double max, IGUIUpdateable guiTarget)
         {
-            _Value = value;
-            _Range = range;
-            _Signed = signed;
+            _Min = min;
+            _Max = max;
+            SetValue(value);
             _GUIUpdateTarget = guiTarget;
         }
 
@@ -60,35 +60,37 @@ namespace WooFractal
                 Mouse.Capture(null);
                 Point _NewPos = e.GetPosition(this);
                 double delta = _NewPos.X - _LastPos.X;
-                _Value += (_Signed ? 2 : 1) * _Range * delta / this.ActualWidth;
+                SetValue(_Value + (_Max - _Min) * delta / this.ActualWidth);
                 ValueUpdated(true);
                 _ValueDrag = false;
             }
         }
 
-        private void ValueUpdated(bool updateGUI)
+        public void ValueUpdated(bool updateGUI)
         {
+            double range = _Max - _Min;
+
             grid.Width = this.ActualWidth;
             rectangle1.Width = this.ActualWidth;
 
-            if (_Signed)
+            if (_Min<0 && _Max>0)
             {
-                double controlMid = this.ActualWidth * 0.5;
-                double controlWidth = this.ActualWidth * 0.5;
+                double controlMid = this.ActualWidth * (-_Min / range);
+                double controlWidth = this.ActualWidth;
 
                 if (_Value < 0)
                 {
                     Thickness marg = rectangle2.Margin;
-                    marg.Left = controlMid + _Value * controlWidth / _Range;
+                    marg.Left = controlMid + _Value * controlWidth / range;
                     rectangle2.Margin = marg;
-                    rectangle2.Width = -_Value * controlWidth / _Range;
+                    rectangle2.Width = -_Value * controlWidth / range;
                 }
                 else
                 {
                     Thickness marg = rectangle2.Margin;
                     marg.Left = controlMid;
                     rectangle2.Margin = marg;
-                    rectangle2.Width = _Value * controlWidth / _Range;
+                    rectangle2.Width = _Value * controlWidth / range;
                 }
             }
             else
@@ -96,7 +98,7 @@ namespace WooFractal
                 Thickness marg = rectangle2.Margin;
                 marg.Left = 0;
                 rectangle2.Margin = marg;
-                rectangle2.Width = _Value * this.ActualWidth / _Range;
+                rectangle2.Width = _Value * this.ActualWidth / range;
             }
 
             if (updateGUI)
@@ -110,17 +112,16 @@ namespace WooFractal
             Mouse.Capture(sender as System.Windows.IInputElement);
             _ValueDrag = true;
             _LastPos = e.GetPosition(this);
-
-            if (_Signed)
-            {
-                _Value = (_LastPos.X - (this.ActualWidth * 0.5)) * _Range * 2 / this.ActualWidth;
-            }
-            else
-            {
-                _Value = _Range * _LastPos.X / this.ActualWidth;
-            }
+            SetValue(_Min + ((_Max - _Min) * _LastPos.X / this.ActualWidth));
 
             ValueUpdated(true);
+        }
+
+        private void SetValue(double value)
+        {
+            _Value = value;
+            if (_Value < _Min) _Value = _Min;
+            if (_Value > _Max) _Value = _Max;
         }
 
         private void rectangle1_PreviewMouseMove(object sender, MouseEventArgs e)
@@ -129,7 +130,7 @@ namespace WooFractal
             {
                 Point _NewPos = e.GetPosition(this);
                 double delta = _NewPos.X - _LastPos.X;
-                _Value += (_Signed ? 2 : 1) * _Range * delta / this.ActualWidth;
+                SetValue(_Value + (_Max - _Min) * delta / this.ActualWidth);
                 _LastPos = _NewPos;
                 ValueUpdated(true);
             }
