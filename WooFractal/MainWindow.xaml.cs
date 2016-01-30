@@ -390,6 +390,9 @@ namespace WooFractal
             }
             _SceneScript._Program += "distanceminimum=" + Math.Pow(10, -_RenderOptions._DistanceMinimum).ToString("0.#######") + "\r\n";
             _SceneScript._Program += "distanceiterations=" + _RenderOptions._DistanceIterations + "\r\n";
+            _SceneScript._Program += "distanceextents = vec(" + _RenderOptions._DistanceExtents + "," + _RenderOptions._DistanceExtents + "," + _RenderOptions._DistanceExtents + ")\r\n";
+            _SceneScript._Program += "fractaliterationcount = " + _RenderOptions._FractalIterationCount + "\r\n";
+            _SceneScript._Program += "fractalcolouriterationcount = " + _RenderOptions._ColourIterationCount + "\r\n";
             _SceneScript._Program += "stepsize=" + _RenderOptions._StepSize + "\r\n";
             _SceneScript._Program += "materialfunction(fracColours)\r\n";
             _SceneScript._Program += "fractal\r\n";

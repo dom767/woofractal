@@ -548,6 +548,8 @@ namespace WooFractal.Objects.WooScript
             _FloatVariables.Add("distanceiterations");
             _FloatVariables.Add("stepsize");
             _FloatVariables.Add("depth");
+            _FloatVariables.Add("fractaliterationcount");
+            _FloatVariables.Add("fractalcolouriterationcount");
         }
 
         public static NullFunction GetNullFunction(string name)

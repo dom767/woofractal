@@ -21,6 +21,8 @@ namespace WooFractal.Objects
         public Vector3 _DistanceExtents;
         public double _StepSize;
         public List<FractalIteration> _FractalIterations;
+        public int _FractalIterationCount;
+        public int _ColourIterationCount;
 
         public Fractal(Vector3 centre,
             Vector3 scale,
@@ -31,7 +33,9 @@ namespace WooFractal.Objects
             int distanceIterations,
             Vector3 distanceExtents,
             double stepSize,
-            List<FractalIteration> fractalIterations)
+            List<FractalIteration> fractalIterations,
+            int fractalIterationCount,
+            int colourIterationCount)
         {
             _Material = new Material();
             _Position = new Vector3();
@@ -47,6 +51,8 @@ namespace WooFractal.Objects
             _DistanceExtents = distanceExtents;
             _StepSize = stepSize;
             _FractalIterations = fractalIterations;
+            _FractalIterationCount = fractalIterationCount;
+            _ColourIterationCount = colourIterationCount;
         }
 
         public void CreateElement(bool preview, XElement parent)
@@ -62,7 +68,9 @@ namespace WooFractal.Objects
                 new XAttribute("position", _Position),
                 new XAttribute("scale", _Scale),
                 new XAttribute("rotation", _Rotation),
-                new XAttribute("ignoreWhileLighting", false));
+                new XAttribute("ignoreWhileLighting", false),
+                new XAttribute("iterationCount", _FractalIterationCount),
+                new XAttribute("colourIterationCount", _ColourIterationCount));
             ret.Add(_Material.CreateElement(preview));
             for (int i = 0; i < _FractalIterations.Count(); i++)
             {

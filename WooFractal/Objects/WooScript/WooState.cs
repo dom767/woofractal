@@ -47,6 +47,8 @@ namespace WooFractal.Objects.WooScript
         public string _MaterialFunction = "";
         public int _Depth = 4;
         public List<FractalIteration> _FractalIterations = new List<FractalIteration>();
+        public int _FractalIterationCount = 15;
+        public int _ColourIterationCount = 15;
 
         public WooState()
         {
@@ -161,6 +163,8 @@ namespace WooFractal.Objects.WooScript
                 clone.AddFloat(floatvar._Name, floatvar._Value);
             }
             clone._FractalIterations = this._FractalIterations;
+            clone._FractalIterationCount = this._FractalIterationCount;
+            clone._ColourIterationCount = this._ColourIterationCount;
             return clone;
         }
         void SetSelectedValue(ref Vector3 target, string selector, double value)
@@ -248,6 +252,10 @@ namespace WooFractal.Objects.WooScript
                     return _Depth;
                 if (IsFloatVariable(target))
                     return GetFloatValue(target);
+                if (target.Equals("fractaliterationcount", StringComparison.Ordinal))
+                    return _FractalIterationCount;
+                if (target.Equals("fractalcolouriterationcount", StringComparison.Ordinal))
+                    return _ColourIterationCount;
             }
             throw new EvaluateException("no matching target for \"" + target + "\"");
         }
@@ -544,6 +552,14 @@ namespace WooFractal.Objects.WooScript
                 if (IsFloatVariable(target))
                 {
                     SetFloatValue(target, value);
+                }
+                if (target.Equals("fractaliterationcount", StringComparison.Ordinal))
+                {
+                    _FractalIterationCount = (int)(value + 0.5);
+                }
+                if (target.Equals("fractalcolouriterationcount", StringComparison.Ordinal))
+                {
+                    _ColourIterationCount = (int)(value + 0.5);
                 }
             }
         }

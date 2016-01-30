@@ -405,7 +405,9 @@ namespace WooFractal.Objects.WooScript
                     state._DistanceIterations,
                     state._DistanceExtents,
                     state._StepSize,
-                    state._FractalIterations);
+                    state._FractalIterations,
+                    state._FractalIterationCount,
+                    state._ColourIterationCount);
                 newFractal._Material = GenerateMaterial(state);
                 newFractal.CreateElement(state._Preview, state._Parent);
             }
