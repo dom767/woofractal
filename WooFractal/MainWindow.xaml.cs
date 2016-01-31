@@ -213,7 +213,6 @@ namespace WooFractal
 
             _Scene._PathTracer = pt;
 
-            _Dirty = false;
             _CameraDirty = false;
 
             return XML;
@@ -408,6 +407,8 @@ namespace WooFractal
             {
                 TriggerPreview();
             }
+
+            _Dirty = false;
         }
 
         private void TriggerPreview()
@@ -423,6 +424,7 @@ namespace WooFractal
                 _ImageRenderer.TransferLatest(false);
                 _ImageRenderer.Stop();
             }
+
             _ImageRenderer = new ImageRenderer(image1, BuildXML(false), (int)image1.Width, (int)image1.Height, true);
             _ImageRenderer.SetFixedExposure(!(autoExposure.IsChecked.HasValue && autoExposure.IsChecked.Value));
             _ImageRenderer.SetExposureValue((float)_Exposure);
@@ -649,7 +651,7 @@ namespace WooFractal
 
         public void StartPreview()
         {
-            TriggerPreview();
+            Compile();
             _Timer.Start();
         }
 
