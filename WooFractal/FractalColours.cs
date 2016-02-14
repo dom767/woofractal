@@ -1,8 +1,10 @@
-﻿using System;
+﻿using System;   
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Controls;
+using System.Xml.Linq;
+using System.Xml;
 
 namespace WooFractal
 {
@@ -18,6 +20,42 @@ namespace WooFractal
         public UserControl GetControl()
         {
             return new FractalColourControl(this);
+        }
+
+        public void CreateElement(XElement parent)
+        {
+            XElement ret = new XElement("FRACTALCOLOURS",
+                new XAttribute("xOrbitEnabled", _XOrbitEnabled),
+                new XAttribute("yOrbitEnabled", _YOrbitEnabled),
+                new XAttribute("zOrbitEnabled", _ZOrbitEnabled),
+                _OrbitColoursX.CreateElement("ORBITCOLOURSX"),
+                _OrbitColoursY.CreateElement("ORBITCOLOURSY"),
+                _OrbitColoursZ.CreateElement("ORBITCOLOURSZ"));
+            parent.Add(ret);
+        }
+
+        public void LoadXML(XmlReader reader)
+        {
+            _XOrbitEnabled = bool.Parse(reader.GetAttribute("xOrbitEnabled"));
+            _YOrbitEnabled = bool.Parse(reader.GetAttribute("yOrbitEnabled"));
+            _ZOrbitEnabled = bool.Parse(reader.GetAttribute("zOrbitEnabled"));
+
+            while (reader.NodeType != XmlNodeType.EndElement && reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Element && reader.Name == "ORBITCOLOURSX")
+                {
+                    _OrbitColoursX.LoadXML(reader);
+                }
+                if (reader.NodeType == XmlNodeType.Element && reader.Name == "ORBITCOLOURSY")
+                {
+                    _OrbitColoursY.LoadXML(reader);
+                }
+                if (reader.NodeType == XmlNodeType.Element && reader.Name == "ORBITCOLOURSZ")
+                {
+                    _OrbitColoursZ.LoadXML(reader);
+                }
+            }
+            reader.Read();
         }
 
         public string GenerateScript(bool complexMaterials)

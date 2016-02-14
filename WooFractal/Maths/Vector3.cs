@@ -14,6 +14,14 @@ namespace WooFractal
         public Vector3(Vector3 rhs) { x = rhs.x; y = rhs.y; z = rhs.z; }
         public Vector3(Colour rhs) { x = rhs._Red; y = rhs._Green; z = rhs._Blue; }
 
+        public void LoadString(string vec)
+        {
+            string[] xyz = vec.Split(',');
+            x = double.Parse(xyz[0]);
+            y = double.Parse(xyz[1]);
+            z = double.Parse(xyz[2]);
+        }
+
         public override string ToString()
         {
             return x.ToString(CultureInfo.InvariantCulture) + ", " + y.ToString(CultureInfo.InvariantCulture) + ", " + z.ToString(CultureInfo.InvariantCulture);

@@ -45,11 +45,16 @@ namespace WooFractal
 
         public XElement CreateElement(bool preview)
         {
+            return CreateElement("MATERIAL", preview);
+        }
+
+        public XElement CreateElement(string name, bool preview)
+        {
             XElement mat;
             if (preview)
             {
                 Colour black = new Colour(0, 0, 0);
-                mat = new XElement("MATERIAL",
+                mat = new XElement(name,
                     new XAttribute("specularPower", 10),
                     new XAttribute("opacity", 1),
                     new XAttribute("density", 1),
@@ -64,7 +69,7 @@ namespace WooFractal
             }
             else
             {
-                mat = new XElement("MATERIAL",
+                mat = new XElement(name,
                     new XAttribute("specularPower", _SpecularPower),
                     new XAttribute("opacity", _Opacity),
                     new XAttribute("density", _Density),
@@ -83,6 +88,48 @@ namespace WooFractal
             return mat;
         }
 
+        public void ReadFloat(XmlReader reader, string name, ref float param)
+        {
+            string attr = reader.GetAttribute(name);
+            if (attr != null)
+                float.TryParse(attr, out param);
+        }
+
+        public void LoadXML(XmlReader reader)
+        {
+            ReadFloat(reader, "specularPower", ref _SpecularPower);
+            ReadFloat(reader, "opacity", ref _Opacity);
+            ReadFloat(reader, "density", ref _Density);
+            ReadFloat(reader, "tintdensity", ref _TintDensity);
+            ReadFloat(reader, "shininess", ref _Shininess);
+            ReadFloat(reader, "refractiveIndex", ref _RefractiveIndex);
+
+            while (reader.NodeType != XmlNodeType.EndElement && reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Element && reader.Name == "DIFFUSECOLOUR")
+                {
+                    _DiffuseColour.LoadXML(reader);
+                }
+                if (reader.NodeType == XmlNodeType.Element && reader.Name == "SPECULARCOLOUR")
+                {
+                    _SpecularColour.LoadXML(reader);
+                }
+                if (reader.NodeType == XmlNodeType.Element && reader.Name == "EMISSIVECOLOUR")
+                {
+                    _EmissiveColour.LoadXML(reader);
+                }
+                if (reader.NodeType == XmlNodeType.Element && reader.Name == "REFLECTIVITYCOLOUR")
+                {
+                    _Reflectivity.LoadXML(reader);
+                }
+                if (reader.NodeType == XmlNodeType.Element && reader.Name == "ABSORPTIONCOLOUR")
+                {
+                    _AbsorptionColour.LoadXML(reader);
+                }
+            }
+            reader.Read();
+        }
+        
         public string _MaterialFunction;
         public Colour _DiffuseColour;
         public Colour _SpecularColour;

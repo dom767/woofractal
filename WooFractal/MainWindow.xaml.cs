@@ -19,6 +19,9 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Microsoft.Win32;
 using WooFractal.Objects;
+using System.Xml.Serialization;
+using System.Xml.Linq;
+using System.Xml;
 
 namespace WooFractal
 {
@@ -33,66 +36,6 @@ namespace WooFractal
         WooScript _LightingScript;
         Scene _Scene;
         PostProcess _PostProcess;
-
-        public double _FocusDistance
-        {
-            get { return (double)GetValue(_DepthProperty); }
-            set { SetValue(_DepthProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for  _Depth.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty _DepthProperty =
-            DependencyProperty.Register("_FocusDistance", typeof(double), typeof(MainWindow), new UIPropertyMetadata((double)0));
-
-        public double _ApertureSize
-        {
-            get { return (double)GetValue(_ApertureSizeProperty); }
-            set { SetValue(_ApertureSizeProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for _Depth.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty _ApertureSizeProperty =
-            DependencyProperty.Register("_ApertureSize", typeof(double), typeof(MainWindow), new UIPropertyMetadata((double)1.0));
-
-        public double _FOV
-        {
-            get { return (double)GetValue(_FOVProperty); }
-            set { SetValue(_FOVProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for _Depth.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty _FOVProperty =
-            DependencyProperty.Register("_FOV", typeof(double), typeof(MainWindow), new UIPropertyMetadata((double)40));
-
-        public double _Spherical
-        {
-            get { return (double)GetValue(_SphericalProperty); }
-            set { SetValue(_SphericalProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for _Depth.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty _SphericalProperty =
-            DependencyProperty.Register("_Spherical", typeof(double), typeof(MainWindow), new UIPropertyMetadata((double)0));
-
-        public double _Stereographic
-        {
-            get { return (double)GetValue(_StereographicProperty); }
-            set { SetValue(_StereographicProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for _Depth.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty _StereographicProperty =
-            DependencyProperty.Register("_Stereographic", typeof(double), typeof(MainWindow), new UIPropertyMetadata((double)0));
-
-        public double _Exposure
-        {
-            get { return (double)GetValue(_ExposureProperty); }
-            set { SetValue(_ExposureProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for _Depth.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty _ExposureProperty =
-            DependencyProperty.Register("_Exposure", typeof(double), typeof(MainWindow), new UIPropertyMetadata((double)0));
 
         public double _CamPosX
         {
@@ -154,24 +97,14 @@ namespace WooFractal
         public static readonly DependencyProperty _CamTagZProperty =
             DependencyProperty.Register("_CamTagZ", typeof(double), typeof(MainWindow), new UIPropertyMetadata((double)0));
             
-        private void UpdateCameraUI()
-        {
-            _CamPosX = _Camera._Position.x;
-            _CamPosY = _Camera._Position.y;
-            _CamPosZ = _Camera._Position.z;
-            _CamTagX = _Camera._Target.x;
-            _CamTagY = _Camera._Target.y;
-            _CamTagZ = _Camera._Target.z;
-        }
         private void InitialiseCamera()
         {
-            _Camera = new Camera(new Vector3(-0.6, 1.2, -0.6), new Vector3(0, 0.5, 0), _AppSettings._FOV, _AppSettings._Spherical, _AppSettings._Stereographic);
-            UpdateCameraUI();
-            _FocusDistance = (_Camera._Target - _Camera._Position).Magnitude();
-            _ApertureSize = _AppSettings._ApertureSize;
-            _FOV = _AppSettings._FOV;
-            _Spherical = _AppSettings._Spherical;
-            _Stereographic = _AppSettings._Stereographic;
+            _Camera = new Camera(_AppSettings._CameraFrom, _AppSettings._CameraTo, _AppSettings._FOV, _AppSettings._Spherical, _AppSettings._Stereographic);
+            _WootracerOptions._FocusDistance = (_Camera._Target - _Camera._Position).Magnitude();
+            _WootracerOptions._ApertureSize = _AppSettings._ApertureSize;
+            _WootracerOptions._FieldOfView = _AppSettings._FOV;
+            _WootracerOptions._Spherical = _AppSettings._Spherical;
+            _WootracerOptions._Stereographic = _AppSettings._Stereographic;
         }
 
         private void InitialiseScene()
@@ -190,6 +123,7 @@ namespace WooFractal
             _BackgroundScript._Program = "rule main {\r\npos.y -= 0\r\ndiff = vec(1.0, 1.0, 1.0)\r\nrefl = vec(0.4, 0.4, 0.4)\r\ngloss = 0.97\r\nscale = vec(460, 460, 460)\r\npos.y-=1\r\ncylinder\r\n}";
             _SceneScript._Program = "rule main {box}";
             _LightingScript._Program = "rule main {directionalLight(vec(1.0, 1.0, 1.0), vec(-0.7, 1.0, -0.6), 0.02, 1) \r\n background(vec(0.8,0.8,0.8))}";
+            LoadFractal("scratch");
 //            backgroundDesc.Text = _BackgroundScript._Program;
 //            sceneDesc.Text = _SceneScript._Program;
 //            lightingDesc.Text = _LightingScript._Program;
@@ -239,11 +173,13 @@ namespace WooFractal
 
             _SettingsLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WooFractal\\Settings.xml";
             _AppSettings = AppSettings.Load(_SettingsLocation);
+            _WootracerOptions = _AppSettings._WootracerOptions;
 
             // initialise post process settings
             _PostProcess = new PostProcess();
 
             // starting camera settings
+            _WootracerOptions = new WootracerOptions(); 
             InitialiseCamera();
 
             // initialise the scene
@@ -256,24 +192,17 @@ namespace WooFractal
 
             ShaderScript.ReadDistanceSchema();
 
-            _FractalIterations.Add(new WooFractalIteration(EFractalType.Tetra, new Vector3(0, 0, 0), new Vector3(0, 0, 0), 2.0, new Vector3(1, 1, 1), 1));
-            _FractalIterations.Add(new WooFractalIteration(EFractalType.Menger, new Vector3(0.2, 0, 0), new Vector3(0, 0, 0), 3.0, new Vector3(1, 1, 1), 1));
             BuildFractalList();
 
-            _RenderOptions = new RenderOptions();
             BuildOptionsList();
 
-            _FractalColours = new FractalColours();
-            _FractalColours._XOrbitEnabled = true;
-            _FractalColours._OrbitColoursX._StartColour._DiffuseColour = new Colour(0, 0, 0);
-            _FractalColours._OrbitColoursX._EndColour._DiffuseColour = new Colour(1, 0, 0);
-            _FractalColours._YOrbitEnabled = true;
-            _FractalColours._OrbitColoursY._StartColour._DiffuseColour = new Colour(0, 0, 0);
-            _FractalColours._OrbitColoursY._EndColour._DiffuseColour = new Colour(0, 1, 0);
-            _FractalColours._ZOrbitEnabled = true;
-            _FractalColours._OrbitColoursZ._StartColour._DiffuseColour = new Colour(0, 0, 0);
-            _FractalColours._OrbitColoursZ._EndColour._DiffuseColour = new Colour(0, 0, 1);
             BuildColourList();
+
+//            FractalSettings fractalSettings = LoadFractal("scratch");
+//            _FractalIterations = fractalSettings._FractalIterations;
+  //          _FractalColours = fractalSettings._FractalColours;
+    //        _RenderOptions = fractalSettings._RenderOptions;
+
         }
 
         private List<WooFractalIteration> _FractalIterations = new List<WooFractalIteration>();
@@ -308,16 +237,18 @@ namespace WooFractal
             stackPanel1.Children.Add(new AddFractal());
         }
 
-        RenderOptions _RenderOptions;
+        RenderOptions _RenderOptions = new RenderOptions();
+        WootracerOptions _WootracerOptions = new WootracerOptions();
 
         private void BuildOptionsList()
         {
             stackPanel2.Children.Clear();
 
             stackPanel2.Children.Add(_RenderOptions.GetControl());
+            stackPanel2.Children.Add(_WootracerOptions.GetControl());
         }
 
-        FractalColours _FractalColours;
+        FractalColours _FractalColours = new FractalColours();
 
         private void BuildColourList()
         {
@@ -340,8 +271,8 @@ namespace WooFractal
         private void Preview(bool preview)
         {
 //            _ImageRenderer.Stop();
-            _ImageRenderer.SetFixedExposure(!(autoExposure.IsChecked.HasValue && autoExposure.IsChecked.Value));
-            _ImageRenderer.SetExposureValue((float)_Exposure);
+            _ImageRenderer.SetFixedExposure(true);//!_WootracerOptions._AutoExposure);
+            _ImageRenderer.SetExposureValue((float)_WootracerOptions._Exposure);
             if (!preview)
             {
                 _ImageRenderer = new ImageRenderer(image1, BuildXML(false), 480, 270, false);   
@@ -352,9 +283,9 @@ namespace WooFractal
             {
                 _ImageRenderer.Render();
             }
-            if ((autoExposure.IsChecked.HasValue && autoExposure.IsChecked.Value))
+            if (_WootracerOptions._AutoExposure)
             {
-                _Exposure = _ImageRenderer._MaxValue;
+//                _WootracerOptions._Exposure = _ImageRenderer._MaxValue;
             }
         }
 
@@ -425,9 +356,9 @@ namespace WooFractal
                 _ImageRenderer.Stop();
             }
 
-            _ImageRenderer = new ImageRenderer(image1, BuildXML(false), (int)image1.Width, (int)image1.Height, true);
-            _ImageRenderer.SetFixedExposure(!(autoExposure.IsChecked.HasValue && autoExposure.IsChecked.Value));
-            _ImageRenderer.SetExposureValue((float)_Exposure);
+            _ImageRenderer = new ImageRenderer(image1, BuildXML(true), (int)image1.Width, (int)image1.Height, true);
+            _ImageRenderer.SetFixedExposure(true);//!_WootracerOptions._AutoExposure);
+            _ImageRenderer.SetExposureValue((float)_WootracerOptions._Exposure);
             _ImageRenderer.Render();
         }
 
@@ -446,24 +377,24 @@ namespace WooFractal
 
                 if (e.Key == Key.Left)
                 {
-                    _Velocity.x -= Multiplier * _FocusDistance;
+                    _Velocity.x -= Multiplier * _WootracerOptions._FocusDistance;
                     e.Handled = true;
                 }
                 else if (e.Key == Key.Right)
                 {
-                    _Velocity.x += Multiplier * _FocusDistance;
+                    _Velocity.x += Multiplier * _WootracerOptions._FocusDistance;
                     e.Handled = true;
                 }
                 else if (e.Key == Key.Up)
                 {
                     if (!Keyboard.IsKeyDown(Key.LeftCtrl) && !Keyboard.IsKeyDown(Key.RightCtrl))
                     {
-                        _Velocity.z += Multiplier * _FocusDistance;
+                        _Velocity.z += Multiplier * _WootracerOptions._FocusDistance;
                         e.Handled = true;
                     }
                     else
                     {
-                        _Velocity.y += Multiplier * _FocusDistance;
+                        _Velocity.y += Multiplier * _WootracerOptions._FocusDistance;
                         e.Handled = true;
                     }
                 }
@@ -471,12 +402,12 @@ namespace WooFractal
                 {
                     if (!Keyboard.IsKeyDown(Key.LeftCtrl) && !Keyboard.IsKeyDown(Key.RightCtrl))
                     {
-                        _Velocity.z -= Multiplier * _FocusDistance;
+                        _Velocity.z -= Multiplier * _WootracerOptions._FocusDistance;
                         e.Handled = true;
                     }
                     else
                     {
-                        _Velocity.y -= Multiplier * _FocusDistance;
+                        _Velocity.y -= Multiplier * _WootracerOptions._FocusDistance;
                         e.Handled = true;
                     }
                 }
@@ -524,11 +455,11 @@ namespace WooFractal
                 _Camera._Position.Add(newup);
             }
             */
-            UpdateCameraUI();
-            _FocusDistance = (_Camera._Target - _Camera._Position).Magnitude();
-            _Camera._FOV = _FOV;
-            _Camera._Spherical = _Spherical;
-            _Camera._Stereographic = _Stereographic;
+            _WootracerOptions.UpdateGUI();
+            _WootracerOptions._FocusDistance = (_Camera._Target - _Camera._Position).Magnitude();
+            _Camera._FOV = _WootracerOptions._FieldOfView;
+            _Camera._Spherical = _WootracerOptions._Spherical;
+            _Camera._Stereographic = _WootracerOptions._Stereographic;
 
             _Velocity *= 0.6;
 
@@ -578,7 +509,7 @@ namespace WooFractal
 
             GetDepth(ref depth, (int)(_Scale * mousePos.X), (int)(_Scale * mousePos.Y));
             if (depth>0)
-                _FocusDistance = (double)depth;
+                _WootracerOptions._FocusDistance = (double)depth;
 
             Vector3 dir = (_Camera._Target - _Camera._Position);
             dir.Normalise();
@@ -595,9 +526,9 @@ namespace WooFractal
 
             dir = (_Camera._Target - _Camera._Position);
             dir.Normalise();
-            dir *= _FocusDistance;
+            dir *= _WootracerOptions._FocusDistance;
             _Camera._Target = _Camera._Position + dir;
-            UpdateCameraUI();
+            _WootracerOptions.UpdateGUI();
 
             _ImageDrag = true;
 
@@ -629,7 +560,7 @@ namespace WooFractal
                 newdir *= length;
 
                 _Camera._Target = _Camera._Position + newdir;
-                UpdateCameraUI();
+                _WootracerOptions.UpdateGUI();
                 _CameraDirty = true;
 
                 if (!_Timer.IsEnabled)
@@ -660,11 +591,11 @@ namespace WooFractal
             SaveStatus(); 
 
             _Velocity = new Vector3(0, 0, 0);
-            _Camera._FocusDepth = (float)_FocusDistance;
-            _Camera._ApertureSize = (float)_ApertureSize;
-            _Camera._FOV = (float)_FOV;
-            _Camera._Spherical = (float)_Spherical;
-            _Camera._Stereographic = (float)_Stereographic;
+            _Camera._FocusDepth = (float)_WootracerOptions._FocusDistance;
+            _Camera._ApertureSize = (float)_WootracerOptions._ApertureSize;
+            _Camera._FOV = (float)_WootracerOptions._FieldOfView;
+            _Camera._Spherical = (float)_WootracerOptions._Spherical;
+            _Camera._Stereographic = (float)_WootracerOptions._Stereographic;
 
             StopPreview();
 
@@ -751,7 +682,7 @@ namespace WooFractal
 
         private bool getShadowsEnabled()
         {
-            return (shadowsEnabled.IsChecked.HasValue && shadowsEnabled.IsChecked.Value);
+            return _WootracerOptions._ShadowsEnabled;
         }
 
         private bool getSimpleLighting()
@@ -791,7 +722,105 @@ namespace WooFractal
             _BackgroundScript.Save("background", "scratch");
             _SceneScript.Save("scene", "scratch");
             _LightingScript.Save("lighting", "scratch");
-            _AppSettings.Save(_SettingsLocation, _Camera);
+            _AppSettings.Save(_SettingsLocation, _Camera, _WootracerOptions);
+            SaveFractal("scratch");
+        }
+
+        public class FractalSettings
+        {
+            public FractalSettings()
+            {
+            }
+
+            public void Set(RenderOptions renderOptions, FractalColours fractalColours, List<WooFractalIteration> fractalIterations)
+            {
+                _RenderOptions = renderOptions;
+                _FractalColours = fractalColours;
+                _FractalIterations = fractalIterations;
+            }
+            public string BuildXML()
+            {
+                XElement parent = new XElement("FRACTAL");
+                _RenderOptions.CreateElement(parent);
+                _FractalColours.CreateElement(parent);
+                for (int i=0; i<_FractalIterations.Count; i++)
+                    _FractalIterations[i].CreateElement(parent);
+                return parent.ToString();
+            }
+            public void Load(string xml)
+            {
+                _FractalIterations = new List<WooFractalIteration>();
+                using (XmlReader reader = XmlReader.Create(new StringReader(xml)))
+                {
+                    while (reader.NodeType != XmlNodeType.EndElement && reader.Read())
+                    {
+                        if (reader.NodeType == XmlNodeType.Element && reader.Name == "RENDEROPTIONS")
+                        {
+                            _RenderOptions = new RenderOptions();
+                            _RenderOptions.LoadXML(reader);
+                        }
+                        if (reader.NodeType == XmlNodeType.Element && reader.Name == "FRACTALCOLOURS")
+                        {
+                            _FractalColours = new FractalColours();
+                            _FractalColours.LoadXML(reader);
+                        }
+                        if (reader.NodeType == XmlNodeType.Element && reader.Name == "KIFSFRACTAL")
+                        {
+                            WooFractalIteration fractalIteration = new WooFractalIteration();
+                            fractalIteration.LoadXML(reader);
+                            _FractalIterations.Add(fractalIteration);
+                        }
+                    }
+                }
+            }
+            public RenderOptions _RenderOptions;
+            public FractalColours _FractalColours;
+            public List<WooFractalIteration> _FractalIterations;
+        }
+        private FractalSettings LoadFractal(string name)
+        {
+            FractalSettings fractalSettings = new FractalSettings();
+            string filename = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WooFractal\\Scripts\\fractal\\" + name + ".wfd";
+            if (System.IO.File.Exists(filename))
+            {
+                StreamReader sr = new StreamReader(filename);
+                string fractal = sr.ReadToEnd();
+                fractalSettings.Load(fractal);
+                sr.Close();
+                _RenderOptions = fractalSettings._RenderOptions;
+                _FractalColours = fractalSettings._FractalColours;
+                _FractalIterations = fractalSettings._FractalIterations;
+            }
+            return fractalSettings;
+        }
+        private void SaveFractal(string name)
+        {
+            string store = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WooFractal\\Scripts";
+            if (!System.IO.Directory.Exists(store))
+            {
+                System.IO.Directory.CreateDirectory(store);
+            }
+            store = store + "\\" + "fractal";
+            if (!System.IO.Directory.Exists(store))
+            {
+                System.IO.Directory.CreateDirectory(store);
+            }
+            string filename = store + "\\" + name + ".wfd";
+
+            using (StreamWriter sw = new StreamWriter(filename))
+            {
+                try
+                {
+                    FractalSettings fractalSettings = new FractalSettings();
+                    fractalSettings.Set(_RenderOptions, _FractalColours, _FractalIterations);
+                    sw.Write(fractalSettings.BuildXML());
+                    sw.Close();
+                }
+                catch (Exception /*e*/)
+                {
+                    // lets not get overexcited...
+                }
+            }
         }
 
         private void Window_Closing_1(object sender, System.ComponentModel.CancelEventArgs e)

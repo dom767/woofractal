@@ -15,6 +15,7 @@ namespace WooFractal
         public double _ApertureSize;
         public double _Spherical;
         public double _Stereographic;
+        public WootracerOptions _WootracerOptions = new WootracerOptions();
 
         public AppSettings()
         {
@@ -26,8 +27,9 @@ namespace WooFractal
             _Stereographic = 0.0;
         }
 
-        public void Save(string filename, Camera camera)
+        public void Save(string filename, Camera camera, WootracerOptions wootracerOptions)
         {
+            _WootracerOptions = wootracerOptions;
             using (StreamWriter sw = new StreamWriter(filename))
             {
                 try

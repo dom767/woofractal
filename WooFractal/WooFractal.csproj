@@ -183,6 +183,10 @@
     <Compile Include="WooSlider.xaml.cs">
       <DependentUpon>WooSlider.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WootracerControls.xaml.cs">
+      <DependentUpon>WootracerControls.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WootracerOptions.cs" />
     <Page Include="AddFractal.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -248,6 +252,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WooSlider.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WootracerControls.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
