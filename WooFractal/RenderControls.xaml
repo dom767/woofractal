@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="364" d:DesignWidth="348" xmlns:my="clr-namespace:WooFractal">
+             d:DesignHeight="364" d:DesignWidth="348" Margin="0,10,0,0" xmlns:my="clr-namespace:WooFractal">
     <Border BorderBrush="Black" BorderThickness="1">
         <Grid Width="348">
             <my:WooSlider HorizontalAlignment="Left" Margin="12,57,0,0" x:Name="wooSlider1" VerticalAlignment="Top" Width="324" />
