@@ -312,6 +312,9 @@ namespace WooFractal
 
             SaveStatus();
 
+            _BackgroundScript._Program = _RenderOptions._Backgrounds[_RenderOptions._Background]._Description;
+            _LightingScript._Program = _RenderOptions._LightingEnvironments[_RenderOptions._Lighting]._Description;
+
             _SceneScript._Program = "rule main {\r\n";
             _SceneScript._Program += "fractal_reset()\r\n";
             for (int i = 0; i < _FractalIterations.Count; i++)

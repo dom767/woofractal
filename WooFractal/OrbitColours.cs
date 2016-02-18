@@ -7,14 +7,14 @@ using System.Xml;
 
 namespace WooFractal
 {
+    public enum EBlendType
+    {
+        Linear = 0,
+        Chop = 1,
+    };
+
     public class OrbitColours
     {
-        public enum EBlendType
-        {
-            Linear=0,
-            Chop=1,
-        };
-
         public XElement CreateElement(string name)
         {
             XElement ret;
@@ -32,10 +32,10 @@ namespace WooFractal
 
         public void LoadXML(XmlReader reader)
         {
-            _BlendType = (EBlendType)Enum.Parse(typeof(EBlendType), reader.GetAttribute("blendType"));
-            _Multiplier = double.Parse(reader.GetAttribute("multiplier"));
-            _Offset = double.Parse(reader.GetAttribute("offset"));
-            _Power = double.Parse(reader.GetAttribute("power"));
+            XMLHelpers.ReadBlendType(reader, "blendType", ref _BlendType);
+            XMLHelpers.ReadDouble(reader, "multiplier", ref _Multiplier);
+            XMLHelpers.ReadDouble(reader, "offset", ref _Offset);
+            XMLHelpers.ReadDouble(reader, "power", ref _Power);
 
             while (reader.NodeType != XmlNodeType.EndElement && reader.Read())
             {

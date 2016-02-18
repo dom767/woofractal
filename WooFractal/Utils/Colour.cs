@@ -80,14 +80,5 @@ namespace WooFractal
                 new XAttribute("type", 0),
                 new XAttribute("colour", ToString()));
         }
-        
-        public void LoadXML(XmlReader reader)
-        {
-            string colour = reader.GetAttribute("colour");
-            string[] rgb = colour.Split(',');
-            _Red = float.Parse(rgb[0]);
-            _Green = float.Parse(rgb[1]);
-            _Blue = float.Parse(rgb[2]);
-        }
     }
 }

@@ -47,10 +47,10 @@ namespace WooFractal
             wooSlider1.Set(_OrbitColours._Multiplier, 0, 10, this);
             switch (_OrbitColours._BlendType)
                 {
-                case OrbitColours.EBlendType.Linear:
+                case EBlendType.Linear:
                     comboBox1.SelectedIndex = 0;
                     break;
-                case OrbitColours.EBlendType.Chop:
+                case EBlendType.Chop:
                     comboBox1.SelectedIndex = 1;
                     break;
             }
@@ -75,10 +75,10 @@ namespace WooFractal
             switch (comboBox1.SelectedIndex)
             {
                 case 0:
-                    _OrbitColours._BlendType = OrbitColours.EBlendType.Linear;
+                    _OrbitColours._BlendType = EBlendType.Linear;
                     break;
                 case 1:
-                    _OrbitColours._BlendType = OrbitColours.EBlendType.Chop;
+                    _OrbitColours._BlendType = EBlendType.Chop;
                     break;
             }
             GUIUpdate();

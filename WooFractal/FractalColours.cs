@@ -36,9 +36,9 @@ namespace WooFractal
 
         public void LoadXML(XmlReader reader)
         {
-            _XOrbitEnabled = bool.Parse(reader.GetAttribute("xOrbitEnabled"));
-            _YOrbitEnabled = bool.Parse(reader.GetAttribute("yOrbitEnabled"));
-            _ZOrbitEnabled = bool.Parse(reader.GetAttribute("zOrbitEnabled"));
+            XMLHelpers.ReadBool(reader, "xOrbitEnabled", ref _XOrbitEnabled);
+            XMLHelpers.ReadBool(reader, "yOrbitEnabled", ref _YOrbitEnabled);
+            XMLHelpers.ReadBool(reader, "zOrbitEnabled", ref _ZOrbitEnabled);
 
             while (reader.NodeType != XmlNodeType.EndElement && reader.Read())
             {
@@ -68,12 +68,12 @@ namespace WooFractal
             double max = totalDiffuse.GetMaxComponent();
             if (max < 0.001) max = 0.001;
 
-            string roundstartX = (_OrbitColoursX._BlendType == OrbitColours.EBlendType.Chop) ? "round(" : "";
-            string roundendX = (_OrbitColoursX._BlendType == OrbitColours.EBlendType.Chop) ? ")" : "";
-            string roundstartY = (_OrbitColoursY._BlendType == OrbitColours.EBlendType.Chop) ? "round(" : "";
-            string roundendY = (_OrbitColoursY._BlendType == OrbitColours.EBlendType.Chop) ? ")" : "";
-            string roundstartZ = (_OrbitColoursZ._BlendType == OrbitColours.EBlendType.Chop) ? "round(" : "";
-            string roundendZ = (_OrbitColoursZ._BlendType == OrbitColours.EBlendType.Chop) ? ")" : "";
+            string roundstartX = (_OrbitColoursX._BlendType == EBlendType.Chop) ? "round(" : "";
+            string roundendX = (_OrbitColoursX._BlendType == EBlendType.Chop) ? ")" : "";
+            string roundstartY = (_OrbitColoursY._BlendType == EBlendType.Chop) ? "round(" : "";
+            string roundendY = (_OrbitColoursY._BlendType == EBlendType.Chop) ? ")" : "";
+            string roundstartZ = (_OrbitColoursZ._BlendType == EBlendType.Chop) ? "round(" : "";
+            string roundendZ = (_OrbitColoursZ._BlendType == EBlendType.Chop) ? ")" : "";
 
             script += "shader fracColours {\r\n";
             script += "trappos = vec("+roundstartX+"pow(mod((diff.x*" + _OrbitColoursX._Multiplier.ToString() + ")+" + _OrbitColoursX._Offset.ToString() + ",1.0)," + Math.Pow(10, _OrbitColoursX._Power).ToString() + ")"+roundendX+",";

@@ -187,6 +187,7 @@
       <DependentUpon>WootracerControls.xaml</DependentUpon>
     </Compile>
     <Compile Include="WootracerOptions.cs" />
+    <Compile Include="XMLHelpers.cs" />
     <Page Include="AddFractal.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

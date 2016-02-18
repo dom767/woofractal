@@ -37,12 +37,12 @@ namespace WooFractal
 
         public void LoadXML(XmlReader reader)
         {
-            _PreRotation.LoadString(reader.GetAttribute("preRotation"));
-            _PostRotation.LoadString(reader.GetAttribute("postRotation"));
-            _Scale = double.Parse(reader.GetAttribute("scale"));
-            _Offset.LoadString(reader.GetAttribute("offset"));
-            _FractalType = (EFractalType)Enum.Parse(typeof(EFractalType), reader.GetAttribute("fractalType"));
-            _Repeats = int.Parse(reader.GetAttribute("repeats"));
+            XMLHelpers.ReadVector3(reader, "preRotation", ref _PreRotation);
+            XMLHelpers.ReadVector3(reader, "postRotation", ref _PostRotation);
+            XMLHelpers.ReadDouble(reader, "scale", ref _Scale);
+            XMLHelpers.ReadVector3(reader, "offset", ref _Offset);
+            XMLHelpers.ReadFractalType(reader, "fractalType", ref _FractalType);
+            XMLHelpers.ReadInt(reader, "repeats", ref _Repeats);
             reader.Read();
         }
 
