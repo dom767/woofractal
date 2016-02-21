@@ -39,15 +39,15 @@ namespace WooFractal
             {
                 comboBox1.Items.Add(script._Name);
             }
-            comboBox1.SelectedIndex = _Parent._Background;
 
             // lighting environments
             foreach (Script script in _Parent._LightingEnvironments)
             {
                 comboBox2.Items.Add(script._Name);
             }
-            comboBox2.SelectedIndex = _Parent._Lighting;
 
+            comboBox1.SelectedIndex = _Parent._Background;
+            comboBox2.SelectedIndex = _Parent._Lighting;
         }
 
         public void RenderSliders()
@@ -68,16 +68,21 @@ namespace WooFractal
             _Parent._DistanceExtents = wooSlider4.GetSliderValue();
             _Parent._FractalIterationCount = (int)(wooSlider5.GetSliderValue() + 0.5);
             _Parent._ColourIterationCount = (int)(wooSlider6.GetSliderValue() + 0.5);
-            _Parent._Background = comboBox1.SelectedIndex;
-            _Parent._Lighting = comboBox2.SelectedIndex;
 
             ((MainWindow)System.Windows.Application.Current.MainWindow).SetDirty();
         }
 
         private void comboBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            GUIUpdate();
+            _Parent._Background = comboBox1.SelectedIndex;
+            ((MainWindow)System.Windows.Application.Current.MainWindow).SetDirty();
         }
-        
+
+        private void comboBox2_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            _Parent._Lighting = comboBox2.SelectedIndex;
+            ((MainWindow)System.Windows.Application.Current.MainWindow).SetDirty();
+        }
+
     }
 }

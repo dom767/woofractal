@@ -21,7 +21,7 @@
             <Label Content="Colour Iterations" Height="24" HorizontalAlignment="Left" Margin="13,296,0,0" Name="label7" VerticalAlignment="Top" />
             <my:WooSlider HorizontalAlignment="Left" Margin="12,318,0,0" x:Name="wooSlider6" VerticalAlignment="Top" Width="324" />
             <ComboBox Height="25" HorizontalAlignment="Left" Margin="12,372,0,0" Name="comboBox1" VerticalAlignment="Top" Width="159" SelectionChanged="comboBox1_SelectionChanged" />
-            <ComboBox Height="25" HorizontalAlignment="Left" Margin="177,372,0,0" Name="comboBox2" VerticalAlignment="Top" Width="159" SelectionChanged="comboBox1_SelectionChanged" />
+            <ComboBox Height="25" HorizontalAlignment="Left" Margin="177,372,0,0" Name="comboBox2" VerticalAlignment="Top" Width="159" SelectionChanged="comboBox2_SelectionChanged" />
             <Label Content="Background" Height="26" HorizontalAlignment="Left" Margin="13,349,0,0" Name="label8" VerticalAlignment="Top" />
             <Label Content="Lighting" Height="26" HorizontalAlignment="Left" Margin="177,349,0,0" Name="label9" VerticalAlignment="Top" />
         </Grid>
