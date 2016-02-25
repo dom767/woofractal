@@ -151,33 +151,6 @@ namespace WooFractal
             ((MainWindow)System.Windows.Application.Current.MainWindow).DemoteIteration(_Parent);
         }
 
-        bool _ValueDrag = false;
-
-        private void rectangle1_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            System.Console.WriteLine("pmlbdown");
-            _ValueDrag = true;
-            Mouse.Capture(sender as System.Windows.IInputElement);
-        }
-
-        private void rectangle1_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (_ValueDrag)
-            {
-                System.Console.WriteLine("mm");
-                Point pos = e.GetPosition(sender as Rectangle);
-                SetValue(sender as Rectangle, pos);
-            }
-        }
-
-        private void rectangle1_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            Mouse.Capture(null);
-            System.Console.WriteLine("pmlbup");
-            SetValue(sender as Rectangle, e.GetPosition(sender as Rectangle));
-            _ValueDrag = false;
-        }
-
         private void textBox1_TextChanged(object sender, TextChangedEventArgs e)
         {
             GUIUpdate();
