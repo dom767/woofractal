@@ -20,7 +20,8 @@ namespace WooFractal
     public partial class OrbitColourControl : UserControl, IGUIUpdateable
     {
         OrbitColours _OrbitColours;
-        IGUIUpdateable _GUIUpdateable;         
+        IGUIUpdateable _GUIUpdateable;
+        bool _Setup = false;
 
         public OrbitColourControl()
         {
@@ -56,6 +57,8 @@ namespace WooFractal
             }
             wooSlider2.Set(_OrbitColours._Power, -2, 2, this);
             wooSlider3.Set(_OrbitColours._Offset, 0, 1, this);
+
+            _Setup = true;
         }
 
         public void GUIUpdate()
@@ -70,6 +73,8 @@ namespace WooFractal
 
         private void comboBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (!_Setup)
+                return;
             if (_OrbitColours == null)
                 return;
             switch (comboBox1.SelectedIndex)
