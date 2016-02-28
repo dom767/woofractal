@@ -209,19 +209,25 @@ namespace WooFractal
 
         public void AddCuboid()
         {
-            _FractalIterations.Add(new WooFractalIteration(EFractalType.Cube, new Vector3(0, 0, 0), new Vector3(0, 0, 0), 2.1, new Vector3(1, 1, 1), 1));
+            _FractalIterations.Add(new KIFSIteration(EFractalType.Cube, new Vector3(0, 0, 0), new Vector3(0, 0, 0), 2.1, new Vector3(1, 1, 1), 1));
             BuildFractalList();
         }
 
         public void AddMenger()
         {
-            _FractalIterations.Add(new WooFractalIteration(EFractalType.Menger, new Vector3(0, 0, 0), new Vector3(0, 0, 0), 3.0, new Vector3(1, 1, 1), 1));
+            _FractalIterations.Add(new KIFSIteration(EFractalType.Menger, new Vector3(0, 0, 0), new Vector3(0, 0, 0), 3.0, new Vector3(1, 1, 1), 1));
             BuildFractalList();
         }
 
         public void AddTetra()
         {
-            _FractalIterations.Add(new WooFractalIteration(EFractalType.Tetra, new Vector3(0, 0, 0), new Vector3(0, 0, 0), 2.0, new Vector3(1, 1, 1), 1));
+            _FractalIterations.Add(new KIFSIteration(EFractalType.Tetra, new Vector3(0, 0, 0), new Vector3(0, 0, 0), 2.0, new Vector3(1, 1, 1), 1));
+            BuildFractalList();
+        }
+
+        public void AddMandelbulb()
+        {
+            _FractalIterations.Add(new MandelbulbIteration(new Vector3(0, 0, 0), 8, 1));
             BuildFractalList();
         }
 
@@ -769,7 +775,13 @@ namespace WooFractal
                         }
                         if (reader.NodeType == XmlNodeType.Element && reader.Name == "KIFSFRACTAL")
                         {
-                            WooFractalIteration fractalIteration = new WooFractalIteration();
+                            KIFSIteration fractalIteration = new KIFSIteration();
+                            fractalIteration.LoadXML(reader);
+                            _FractalIterations.Add(fractalIteration);
+                        }
+                        if (reader.NodeType == XmlNodeType.Element && reader.Name == "BULBFRACTAL")
+                        {
+                            MandelbulbIteration fractalIteration = new MandelbulbIteration();
                             fractalIteration.LoadXML(reader);
                             _FractalIterations.Add(fractalIteration);
                         }

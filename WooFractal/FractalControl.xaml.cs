@@ -21,9 +21,9 @@ namespace WooFractal
     public partial class FractalControl : UserControl, IGUIUpdateable
     {
 
-        WooFractalIteration _Parent;
+        KIFSIteration _Parent;
 
-        public FractalControl(WooFractalIteration parent)
+        public FractalControl(KIFSIteration parent)
         {
             InitializeComponent();
 

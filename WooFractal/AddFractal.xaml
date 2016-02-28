@@ -4,9 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="126" d:DesignWidth="348" Margin="0,10,0,0">
+             d:DesignHeight="212" d:DesignWidth="348" Margin="0,10,0,0">
     <Border BorderBrush="Black" BorderThickness="1">
-        <Grid Height="127" Background="White">
+        <Grid Height="212" Background="White">
             <Button Height="58" HorizontalAlignment="Left" Margin="12,50,0,0" Name="button1" VerticalAlignment="Top" Width="58" Click="button1_Click">
                 <StackPanel>
                     <Image Source="/WooFractal;component/cuboidthumb.jpg" />
@@ -18,6 +18,11 @@
                 </StackPanel>
             </Button>
             <Button Height="58" HorizontalAlignment="Left" Margin="148,50,0,0" Name="button3" VerticalAlignment="Top" Width="58" Click="button3_Click">
+                <StackPanel>
+                    <Image Source="/WooFractal;component/tetrathumb.jpg" />
+                </StackPanel>
+            </Button>
+            <Button Height="58" HorizontalAlignment="Left" Margin="12,130,0,0" Name="button4" VerticalAlignment="Top" Width="58" Click="button4_Click">
                 <StackPanel>
                     <Image Source="/WooFractal;component/tetrathumb.jpg" />
                 </StackPanel>

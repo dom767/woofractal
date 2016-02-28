@@ -41,5 +41,11 @@ namespace WooFractal
             // Add Tetra
             ((MainWindow)System.Windows.Application.Current.MainWindow).AddTetra();
         }
+
+        private void button4_Click(object sender, RoutedEventArgs e)
+        {
+            // Add Mandelbulb
+            ((MainWindow)System.Windows.Application.Current.MainWindow).AddMandelbulb();
+        }
     }
 }
