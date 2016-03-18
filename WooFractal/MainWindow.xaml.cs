@@ -231,6 +231,12 @@ namespace WooFractal
             BuildFractalList();
         }
 
+        public void AddMandelbox()
+        {
+            _FractalIterations.Add(new MandelboxIteration(new Vector3(0, 0, 0), 2.1, 1));
+            BuildFractalList();
+        }
+
         private void BuildFractalList()
         {
             stackPanel1.Children.Clear();
@@ -332,7 +338,8 @@ namespace WooFractal
             _SceneScript._Program += "distanceextents = vec(" + _RenderOptions._DistanceExtents + "," + _RenderOptions._DistanceExtents + "," + _RenderOptions._DistanceExtents + ")\r\n";
             _SceneScript._Program += "fractaliterationcount = " + _RenderOptions._FractalIterationCount + "\r\n";
             _SceneScript._Program += "fractalcolouriterationcount = " + _RenderOptions._ColourIterationCount + "\r\n";
-            _SceneScript._Program += "stepsize=" + _RenderOptions._StepSize + "\r\n";
+            _SceneScript._Program += "demode = " + _RenderOptions._DEMode + "\r\n";
+            _SceneScript._Program += "stepsize = " + _RenderOptions._StepSize + "\r\n";
             _SceneScript._Program += "materialfunction(fracColours)\r\n";
             _SceneScript._Program += "fractal\r\n";
             _SceneScript._Program += "}\r\n";
@@ -785,6 +792,12 @@ namespace WooFractal
                             fractalIteration.LoadXML(reader);
                             _FractalIterations.Add(fractalIteration);
                         }
+                        if (reader.NodeType == XmlNodeType.Element && reader.Name == "BOXFRACTAL")
+                        {
+                            MandelboxIteration fractalIteration = new MandelboxIteration();
+                            fractalIteration.LoadXML(reader);
+                            _FractalIterations.Add(fractalIteration);
+                        }
                     }
                 }
             }
@@ -929,6 +942,77 @@ namespace WooFractal
             Compile();
 
             BuildFractalList();
+        }
+
+        private void button2_Click_1(object sender, RoutedEventArgs e)
+        {
+            FractalSettings fractalSettings = new FractalSettings();
+            
+            // load fractal
+            string store = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WooScripter\\Scripts\\fractal";
+
+            // Configure open file dialog box
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.FileName = "fractal"; // Default file name
+            dlg.DefaultExt = ".wfd"; // Default file extension
+            dlg.Filter = "Fractal Descriptor|*.wfd"; // Filter files by extension
+            dlg.InitialDirectory = store;
+
+            // Show open file dialog box
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // get name of file
+            if (result == true)
+            {
+                string filename = dlg.FileName;
+                StreamReader sr = new StreamReader(filename);
+                string fractal = sr.ReadToEnd();
+                fractalSettings.Load(fractal);
+                sr.Close();
+                _RenderOptions = fractalSettings._RenderOptions;
+                _FractalColours = fractalSettings._FractalColours;
+                _FractalIterations = fractalSettings._FractalIterations;
+            }
+        }
+
+        private void button1_Click_1(object sender, RoutedEventArgs e)
+        {
+            // save fractal
+            string store = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\WooFractal\\Scripts";
+            if (!System.IO.Directory.Exists(store))
+            {
+                System.IO.Directory.CreateDirectory(store);
+            }
+            store = store + "\\" + "fractal";
+            if (!System.IO.Directory.Exists(store))
+            {
+                System.IO.Directory.CreateDirectory(store);
+            }
+
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.InitialDirectory = store;
+            saveFileDialog1.Filter = "Fractal Descriptor (*.wfd)|*.wfd";
+            saveFileDialog1.FilterIndex = 1;
+
+            if (saveFileDialog1.ShowDialog() == true)
+            {
+                // Save document
+                string filename = saveFileDialog1.FileName;
+                using (StreamWriter sw = new StreamWriter(filename))
+                {
+                    try
+                    {
+                        FractalSettings fractalSettings = new FractalSettings();
+                        fractalSettings.Set(_RenderOptions, _FractalColours, _FractalIterations);
+                        sw.Write(fractalSettings.BuildXML());
+                        sw.Close();
+                    }
+                    catch (Exception /*e*/)
+                    {
+                        // lets not get overexcited...
+                    }
+                }
+            }
         }
     }
 }

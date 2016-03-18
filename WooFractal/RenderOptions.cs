@@ -28,6 +28,7 @@ namespace WooFractal
         public double _DistanceExtents = 1;
         public int _FractalIterationCount = 15;
         public int _ColourIterationCount = 15;
+        public int _DEMode = 2;
         public int _Background = 0;
         public int _Lighting = 0;
 
@@ -50,6 +51,7 @@ namespace WooFractal
                 new XAttribute("distanceExtents", _DistanceExtents),
                 new XAttribute("fractalIterationCount", _FractalIterationCount),
                 new XAttribute("colourIterationCount", _ColourIterationCount),
+                new XAttribute("deMode", _DEMode),
                 new XAttribute("background", _Background),
                 new XAttribute("lighting", _Lighting));
             parent.Add(ret);
@@ -97,6 +99,7 @@ namespace WooFractal
             XMLHelpers.ReadDouble(reader, "distanceExtents", ref _DistanceExtents);
             XMLHelpers.ReadInt(reader, "fractalIterationCount", ref _FractalIterationCount);
             XMLHelpers.ReadInt(reader, "colourIterationCount", ref _ColourIterationCount);
+            XMLHelpers.ReadInt(reader, "deMode", ref _DEMode);
             XMLHelpers.ReadInt(reader, "background", ref _Background);
             XMLHelpers.ReadInt(reader, "lighting", ref _Lighting);
         }

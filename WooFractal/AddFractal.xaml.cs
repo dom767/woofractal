@@ -47,5 +47,11 @@ namespace WooFractal
             // Add Mandelbulb
             ((MainWindow)System.Windows.Application.Current.MainWindow).AddMandelbulb();
         }
+
+        private void button5_Click(object sender, RoutedEventArgs e)
+        {
+            // Add Mandelbox
+            ((MainWindow)System.Windows.Application.Current.MainWindow).AddMandelbox();
+        }
     }
 }

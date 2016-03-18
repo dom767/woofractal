@@ -49,6 +49,7 @@ namespace WooFractal.Objects.WooScript
         public List<FractalIteration> _FractalIterations = new List<FractalIteration>();
         public int _FractalIterationCount = 15;
         public int _ColourIterationCount = 15;
+        public int _DEMode = 2;
 
         public WooState()
         {
@@ -165,6 +166,7 @@ namespace WooFractal.Objects.WooScript
             clone._FractalIterations = this._FractalIterations;
             clone._FractalIterationCount = this._FractalIterationCount;
             clone._ColourIterationCount = this._ColourIterationCount;
+            clone._DEMode = this._DEMode;
             return clone;
         }
         void SetSelectedValue(ref Vector3 target, string selector, double value)
@@ -256,6 +258,8 @@ namespace WooFractal.Objects.WooScript
                     return _FractalIterationCount;
                 if (target.Equals("fractalcolouriterationcount", StringComparison.Ordinal))
                     return _ColourIterationCount;
+                if (target.Equals("demode", StringComparison.Ordinal))
+                    return _DEMode;
             }
             throw new EvaluateException("no matching target for \"" + target + "\"");
         }
@@ -560,6 +564,10 @@ namespace WooFractal.Objects.WooScript
                 if (target.Equals("fractalcolouriterationcount", StringComparison.Ordinal))
                 {
                     _ColourIterationCount = (int)(value + 0.5);
+                }
+                if (target.Equals("demode", StringComparison.Ordinal))
+                {
+                    _DEMode = (int)(value + 0.5);
                 }
             }
         }

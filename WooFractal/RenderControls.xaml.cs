@@ -46,8 +46,15 @@ namespace WooFractal
                 comboBox2.Items.Add(script._Name);
             }
 
+            // DE modes
+            comboBox3.Items.Add("Standard Mandelbulb");
+            comboBox3.Items.Add("KIFS / Mandelbox");
+            comboBox3.Items.Add("Last iteration");
+            comboBox3.Items.Add("4-point Buddhi/Makin");
+
             comboBox1.SelectedIndex = _Parent._Background;
             comboBox2.SelectedIndex = _Parent._Lighting;
+            comboBox3.SelectedIndex = _Parent._DEMode;
         }
 
         public void RenderSliders()
@@ -81,6 +88,12 @@ namespace WooFractal
         private void comboBox2_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _Parent._Lighting = comboBox2.SelectedIndex;
+            ((MainWindow)System.Windows.Application.Current.MainWindow).SetDirty();
+        }
+
+        private void comboBox3_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            _Parent._DEMode = comboBox3.SelectedIndex;
             ((MainWindow)System.Windows.Application.Current.MainWindow).SetDirty();
         }
 

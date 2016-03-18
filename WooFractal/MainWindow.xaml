@@ -59,5 +59,7 @@
             </TabItem>
         </TabControl>
         <Button Content="Save XML" HorizontalAlignment="Left" Margin="644,0,0,13" Name="button5" Width="101" Click="button5_Click" Height="23" VerticalAlignment="Bottom" />
+        <Button Content="Save Fractal" Height="23" HorizontalAlignment="Left" Margin="1035,0,0,12" Name="button1" VerticalAlignment="Bottom" Width="101" Click="button1_Click_1" />
+        <Button Content="Load Fractal" Height="23" HorizontalAlignment="Left" Margin="928,0,0,13" Name="button2" VerticalAlignment="Bottom" Width="101" Click="button2_Click_1" />
     </Grid>
 </Window>
